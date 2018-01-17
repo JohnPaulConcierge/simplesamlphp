@@ -1,0 +1,31 @@
+<?php
+/**
+* This is how you should build your Zend Framework configurations. Dummy values are provided as an example and won't work
+*/
+return [
+    "saml" => [
+        'config' => [],
+        'service_provider' => [
+            'default-sp' => [
+                'saml:SP',
+                // Place here the path to your certificates and private key
+                'privatekey' => 'saml.pem',
+                'certificate' => 'saml.crt',
+                // Enter the url to your identity provider
+                'idp' => 'http://www.okta.com/example',
+            ],
+        ],
+        'metadata' => [
+            // Here are the detailed configurations for your identity provider (the array key must match your IDP)
+            'http://www.okta.com/example' => [
+                // Put here an URL to the service that handles the SSO
+                'SingleSignOnService' => 'https://www.okta.com/example/saml/sso/',
+                // Put here an URL to the service that handles login out
+                'SingleLogoutService' => 'https://www.okta.com/example/saml/logout/',
+                'certFingerprint' => '',
+            ],
+        ],
+        //Here you'll need to put the field we will search the member on using value retrieved in SAML response
+        'crm_identifier' => 'webid__c',
+    ],
+];
