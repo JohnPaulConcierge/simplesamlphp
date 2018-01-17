@@ -1,4 +1,4 @@
-# Password management
+# SAML Authentication
   
 This project is a Zend Framework module. Its purpose is to manage authentication using SAML.
   
