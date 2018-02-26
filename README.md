@@ -16,7 +16,7 @@ In order to use this library in one of your projects, you just need to add the f
    }
  ], 
 "require": {
-  "johnpaulconcierge/zf-jpc-saml": "^1.0"
+  "johnpaulconcierge/zf-jpc-saml": "^2.1"
 }
 ...
 ```
@@ -25,3 +25,7 @@ In order to use this library in one of your projects, you just need to add the f
   
 Locate config.php.dist and add these configurations to your zend application.
 As this project is a fork of simplesamlphp, you can refer to their [documentation](https://simplesamlphp.org/docs/stable/)
+
+## Disclaimer
+
+Please don't use versions before 2.1 because they are very unsecure.
