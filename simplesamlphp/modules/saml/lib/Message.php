@@ -620,7 +620,7 @@ class sspmod_saml_Message {
 					continue;
 				}
 				/* Extract certificate data (if this is a certificate). */
-				$clientCert = $_SERVER['SSL_CLIENT_CERT'];
+				$clientCert = \SimpleSAML_Utilities::sanitize($_SERVER['SSL_CLIENT_CERT']);
 				$pattern = '/^-----BEGIN CERTIFICATE-----([^-]*)^-----END CERTIFICATE-----/m';
 				if (!preg_match($pattern, $clientCert, $matches)) {
 					$lastError = 'Error while looking for client certificate during TLS handshake with SP, the client certificate does not '

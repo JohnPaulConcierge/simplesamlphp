@@ -145,7 +145,7 @@ class Language
         $this->rtlLanguages = $this->configuration->getArray('language.rtl', array());
         if (isset($_GET[$this->languageParameterName])) {
             $this->setLanguage(
-                $_GET[$this->languageParameterName],
+                \SimpleSAML_Utilities::sanitize($_GET[$this->languageParameterName]),
                 $this->configuration->getBoolean('language.parameter.setcookie', true)
             );
         }
@@ -381,7 +381,7 @@ class Language
         $name = $config->getString('language.cookie.name', 'language');
 
         if (isset($_COOKIE[$name])) {
-            $language = strtolower((string) $_COOKIE[$name]);
+            $language = strtolower((string) \SimpleSAML_Utilities::sanitize($_COOKIE[$name]));
             if (in_array($language, $availableLanguages, true)) {
                 return $language;
             }

@@ -136,7 +136,7 @@ class SimpleSAML_AuthMemCookie
             return;
         }
 
-        $sessionID = $_COOKIE[$cookieName];
+        $sessionID = \SimpleSAML_Utilities::sanitize($_COOKIE[$cookieName]);
 
         // delete the session from memcache
         $memcache = $this->getMemcache();

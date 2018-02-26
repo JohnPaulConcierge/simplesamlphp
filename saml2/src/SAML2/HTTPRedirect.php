@@ -163,7 +163,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
         $relayState = '';
         $sigAlg = '';
         $sigQuery = '';
-        foreach (explode('&', $_SERVER['QUERY_STRING']) as $e) {
+        foreach (explode('&', SAML2_Utilities_Sanitizer::sanitize($_SERVER['QUERY_STRING'])) as $e) {
             $tmp = explode('=', $e, 2);
             $name = $tmp[0];
             if (count($tmp) === 2) {

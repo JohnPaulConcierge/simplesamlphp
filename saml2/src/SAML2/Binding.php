@@ -54,26 +54,28 @@ abstract class SAML2_Binding
      */
     public static function getCurrentBinding()
     {
-        switch ($_SERVER['REQUEST_METHOD']) {
+        switch (SAML2_Utilities_Sanitizer::sanitize($_SERVER['REQUEST_METHOD'])) {
             case 'GET':
-                if (array_key_exists('SAMLRequest', $_GET) || array_key_exists('SAMLResponse', $_GET)) {
+                $get = SAML2_Utilities_Sanitizer::sanitizeArray($_GET);
+                if (array_key_exists('SAMLRequest', $get) || array_key_exists('SAMLResponse', $get)) {
                     return new SAML2_HTTPRedirect();
-                } elseif (array_key_exists('SAMLart', $_GET)) {
+                } elseif (array_key_exists('SAMLart', $get)) {
                     return new SAML2_HTTPArtifact();
                 }
                 break;
 
             case 'POST':
                 if (isset($_SERVER['CONTENT_TYPE'])) {
-                    $contentType = $_SERVER['CONTENT_TYPE'];
+                    $contentType = SAML2_Utilities_Sanitizer::sanitize($_SERVER['CONTENT_TYPE']);
                     $contentType = explode(';', $contentType);
                     $contentType = $contentType[0]; /* Remove charset. */
                 } else {
                     $contentType = NULL;
                 }
-                if (array_key_exists('SAMLRequest', $_POST) || array_key_exists('SAMLResponse', $_POST)) {
+                $post = SAML2_Utilities_Sanitizer::sanitizeArray($_POST);
+                if (array_key_exists('SAMLRequest', $post) || array_key_exists('SAMLResponse', $post)) {
                     return new SAML2_HTTPPost();
-                } elseif (array_key_exists('SAMLart', $_POST)) {
+                } elseif (array_key_exists('SAMLart', $post)) {
                     return new SAML2_HTTPArtifact();
                 } elseif ($contentType === 'text/xml') {
                     return new SAML2_SOAP();
@@ -83,15 +85,15 @@ abstract class SAML2_Binding
 
         $logger = SAML2_Utils::getContainer()->getLogger();
         $logger->warning('Unable to find the SAML 2 binding used for this request.');
-        $logger->warning('Request method: ' . var_export($_SERVER['REQUEST_METHOD'], TRUE));
+        $logger->warning('Request method: ' . var_export(SAML2_Utilities_Sanitizer::sanitize($_SERVER['REQUEST_METHOD']), TRUE));
         if (!empty($_GET)) {
-            $logger->warning("GET parameters: '" . implode("', '", array_map('addslashes', array_keys($_GET))) . "'");
+            $logger->warning("GET parameters: '" . implode("', '", array_map('addslashes', array_keys(SAML2_Utilities_Sanitizer::sanitizeArray($_GET)))) . "'");
         }
         if (!empty($_POST)) {
-            $logger->warning("POST parameters: '" . implode("', '", array_map('addslashes', array_keys($_POST))) . "'");
+            $logger->warning("POST parameters: '" . implode("', '", array_map('addslashes', array_keys(SAML2_Utilities_Sanitizer::sanitizeArray($_POST)))) . "'");
         }
         if (isset($_SERVER['CONTENT_TYPE'])) {
-            $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], TRUE));
+            $logger->warning('Content-Type: ' . var_export(SAML2_Utilities_Sanitizer::sanitize($_SERVER['CONTENT_TYPE']), TRUE));
         }
 
         throw new Exception('Unable to find the current binding.');

@@ -251,23 +251,23 @@ class sspmod_saml_IdP_SAML2 {
 				}
 			}
 
-			$spEntityId = (string)$_REQUEST['spentityid'];
+			$spEntityId = (string)\SimpleSAML_Utilities::sanitize($_REQUEST['spentityid']);
 			$spMetadata = $metadata->getMetaDataConfig($spEntityId, 'saml20-sp-remote');
 
 			if (isset($_REQUEST['RelayState'])) {
-				$relayState = (string)$_REQUEST['RelayState'];
+				$relayState = (string)\SimpleSAML_Utilities::sanitize($_REQUEST['RelayState']);
 			} else {
 				$relayState = NULL;
 			}
 
 			if (isset($_REQUEST['binding'])){
-				$protocolBinding = (string)$_REQUEST['binding'];
+				$protocolBinding = (string)\SimpleSAML_Utilities::sanitize($_REQUEST['binding']);
 			} else {
 				$protocolBinding = NULL;
 			}
 
 			if (isset($_REQUEST['NameIDFormat'])) {
-				$nameIDFormat = (string)$_REQUEST['NameIDFormat'];
+				$nameIDFormat = (string)\SimpleSAML_Utilities::sanitize($_REQUEST['NameIDFormat']);
 			} else {
 				$nameIDFormat = NULL;
 			}
@@ -841,7 +841,7 @@ class sspmod_saml_IdP_SAML2 {
 			if (\SimpleSAML\Utils\HTTP::isHTTPS()) {
 				if (isset($_SERVER['SSL_CLIENT_CERT']) && !empty($_SERVER['SSL_CLIENT_CERT'])) {
 					/* Extract certificate data (if this is a certificate). */
-					$clientCert = $_SERVER['SSL_CLIENT_CERT'];
+					$clientCert = \SimpleSAML_Utilities::sanitize($_SERVER['SSL_CLIENT_CERT']);
 					$pattern = '/^-----BEGIN CERTIFICATE-----([^-]*)^-----END CERTIFICATE-----/m';
 					if (preg_match($pattern, $clientCert, $matches)) {
 						/* We have a client certificate from the browser which we add to the HoK assertion. */

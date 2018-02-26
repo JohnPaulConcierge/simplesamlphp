@@ -71,7 +71,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
     public function receive()
     {
         if (array_key_exists('SAMLart', $_REQUEST)) {
-            $artifact = base64_decode($_REQUEST['SAMLart']);
+            $artifact = base64_decode(SAML2_Utilities_Sanitizer::sanitize($_REQUEST['SAMLart']));
             $endpointIndex =  bin2hex(substr($artifact, 2, 2));
             $sourceId = bin2hex(substr($artifact, 4, 20));
 
@@ -107,7 +107,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
         /* Set the request attributes */
 
         $ar->setIssuer($this->spMetadata->getString('entityid'));
-        $ar->setArtifact($_REQUEST['SAMLart']);
+        $ar->setArtifact(SAML2_Utilities_Sanitizer::sanitize($_REQUEST['SAMLart']));
         $ar->setDestination($endpoint['Location']);
 
         /* Sign the request */
@@ -134,7 +134,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
         $samlResponse->addValidator(array(get_class($this), 'validateSignature'), $artifactResponse);
 
         if (isset($_REQUEST['RelayState'])) {
-            $samlResponse->setRelayState($_REQUEST['RelayState']);
+            $samlResponse->setRelayState(SAML2_Utilities_Sanitizer::sanitize($_REQUEST['RelayState']));
         }
 
         return $samlResponse;

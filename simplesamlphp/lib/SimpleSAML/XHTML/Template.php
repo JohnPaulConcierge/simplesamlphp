@@ -553,7 +553,7 @@ class SimpleSAML_XHTML_Template {
             return $this->readDictionaryPHP($filename);
         }
 
-        SimpleSAML_Logger::error($_SERVER['PHP_SELF'].' - Template: Could not find template file [' . $this->template . '] at [' . $filename . ']');
+        SimpleSAML_Logger::error(\SimpleSAML_Utilities::sanitize($_SERVER['PHP_SELF']).' - Template: Could not find template file [' . $this->template . '] at [' . $filename . ']');
         return array();
     }
 
@@ -634,7 +634,7 @@ class SimpleSAML_XHTML_Template {
 
 
         // Not found in current theme
-        SimpleSAML_Logger::debug($_SERVER['PHP_SELF'].' - Template: Could not find template file [' .
+        SimpleSAML_Logger::debug(\SimpleSAML_Utilities::sanitize($_SERVER['PHP_SELF']).' - Template: Could not find template file [' .
             $template . '] at [' . $filename . '] - now trying the base template');
 
 
@@ -654,7 +654,7 @@ class SimpleSAML_XHTML_Template {
 
         // Not found in default template - log error and throw exception
         $error = 'Template: Could not find template file [' . $template . '] at [' . $filename . ']';
-        SimpleSAML_Logger::critical($_SERVER['PHP_SELF'] . ' - ' . $error);
+        SimpleSAML_Logger::critical(\SimpleSAML_Utilities::sanitize($_SERVER['PHP_SELF']) . ' - ' . $error);
 
         throw new Exception($error);
     }
@@ -671,7 +671,7 @@ class SimpleSAML_XHTML_Template {
         $name = $config->getString('language.cookie.name', 'language');
 
         if (isset($_COOKIE[$name])) {
-            $language = strtolower((string)$_COOKIE[$name]);
+            $language = strtolower((string)\SimpleSAML_Utilities::sanitize($_COOKIE[$name]));
             if (in_array($language, $availableLanguages, TRUE)) {
                 return $language;
             }

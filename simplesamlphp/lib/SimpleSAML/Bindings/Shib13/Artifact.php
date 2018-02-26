@@ -22,7 +22,7 @@ class SimpleSAML_Bindings_Shib13_Artifact {
 
 		$artifacts = array();
 
-		$elements = explode('&', $_SERVER['QUERY_STRING']);
+		$elements = explode('&', \SimpleSAML_Utilities::sanitize($_SERVER['QUERY_STRING']));
 		foreach ($elements as $element) {
 			list($name, $value) = explode('=', $element, 2);
 			$name = urldecode($name);

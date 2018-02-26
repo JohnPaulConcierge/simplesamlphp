@@ -342,7 +342,7 @@ class SimpleSAML_Session implements Serializable
                     return null;
                 }
 
-                if (!SimpleSAML\Utils\Crypto::secureCompare($session->authToken, $_COOKIE[$authTokenCookieName])) {
+                if (!SimpleSAML\Utils\Crypto::secureCompare($session->authToken, \SimpleSAML_Utilities::sanitize($_COOKIE[$authTokenCookieName]))) {
                     SimpleSAML_Logger::warning('Invalid AuthToken cookie.');
                     return null;
                 }

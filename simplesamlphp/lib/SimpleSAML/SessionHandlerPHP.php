@@ -187,7 +187,7 @@ class SimpleSAML_SessionHandlerPHP extends SimpleSAML_SessionHandler
         }
 
         // do not rely on session_id() as it can return the ID of a previous session. Get it from the cookie instead.
-        session_id($_COOKIE[$this->cookie_name]);
+        session_id(\SimpleSAML_Utilities::sanitize($_COOKIE[$this->cookie_name]));
 
         $session_cookie_params = session_get_cookie_params();
 
@@ -257,7 +257,7 @@ class SimpleSAML_SessionHandlerPHP extends SimpleSAML_SessionHandler
             return null;
         }
 
-        $session = $_SESSION['SimpleSAMLphp_SESSION'];
+        $session = \SimpleSAML_Utilities::sanitize($_SESSION['SimpleSAMLphp_SESSION']);
         assert('is_string($session)');
 
         $session = unserialize($session);

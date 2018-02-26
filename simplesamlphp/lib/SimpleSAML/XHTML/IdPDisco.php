@@ -130,13 +130,13 @@ class SimpleSAML_XHTML_IdPDisco
         if (!array_key_exists('entityID', $_GET)) {
             throw new Exception('Missing parameter: entityID');
         } else {
-            $this->spEntityId = $_GET['entityID'];
+            $this->spEntityId = \SimpleSAML_Utilities::sanitize($_GET['entityID']);
         }
 
         if (!array_key_exists('returnIDParam', $_GET)) {
             $this->returnIdParam = 'entityID';
         } else {
-            $this->returnIdParam = $_GET['returnIDParam'];
+            $this->returnIdParam = \SimpleSAML_Utilities::sanitize($_GET['returnIDParam']);
         }
 
         $this->log('returnIdParam initially set to ['.$this->returnIdParam.']');
@@ -156,11 +156,11 @@ class SimpleSAML_XHTML_IdPDisco
         $this->log('isPassive initially set to ['.($this->isPassive ? 'TRUE' : 'FALSE').']');
 
         if (array_key_exists('IdPentityID', $_GET)) {
-            $this->setIdPentityID = $_GET['IdPentityID'];
+            $this->setIdPentityID = \SimpleSAML_Utilities::sanitize($_GET['IdPentityID']);
         }
 
         if (array_key_exists('IDPList', $_REQUEST)) {
-            $this->scopedIDPList = $_REQUEST['IDPList'];
+            $this->scopedIDPList = \SimpleSAML_Utilities::sanitize($_REQUEST['IDPList']);
         }
     }
 
@@ -193,7 +193,7 @@ class SimpleSAML_XHTML_IdPDisco
     {
         $prefixedName = 'idpdisco_'.$this->instance.'_'.$name;
         if (array_key_exists($prefixedName, $_COOKIE)) {
-            return $_COOKIE[$prefixedName];
+            return \SimpleSAML_Utilities::sanitize($_COOKIE[$prefixedName]);
         } else {
             return null;
         }
@@ -279,7 +279,7 @@ class SimpleSAML_XHTML_IdPDisco
 
         // user has clicked on a link, or selected the IdP from a drop-down list
         if (array_key_exists('idpentityid', $_GET)) {
-            return $this->validateIdP($_GET['idpentityid']);
+            return $this->validateIdP(\SimpleSAML_Utilities::sanitize($_GET['idpentityid']));
         }
 
         /* Search for the IdP selection from the form used by the links view. This form uses a name which equals
@@ -288,7 +288,7 @@ class SimpleSAML_XHTML_IdPDisco
          * Unfortunately, php replaces periods in the name with underscores, and there is no reliable way to get them
          * back. Therefore we do some quick and dirty parsing of the query string.
          */
-        $qstr = $_SERVER['QUERY_STRING'];
+        $qstr = \SimpleSAML_Utilities::sanitize($_SERVER['QUERY_STRING']);
         $matches = array();
         if (preg_match('/(?:^|&)idp_([^=]+)=/', $qstr, $matches)) {
             return $this->validateIdP(urldecode($matches[1]));
@@ -344,7 +344,7 @@ class SimpleSAML_XHTML_IdPDisco
     protected function getFromCIDRhint()
     {
         foreach ($this->metadataSets as $metadataSet) {
-            $idp = $this->metadata->getPreferredEntityIdFromCIDRhint($metadataSet, $_SERVER['REMOTE_ADDR']);
+            $idp = $this->metadata->getPreferredEntityIdFromCIDRhint($metadataSet, \SimpleSAML_Utilities::sanitize($_SERVER['REMOTE_ADDR']));
             if (!empty($idp)) {
                 return $idp;
             }
