@@ -366,7 +366,7 @@ class SimpleSAML_Auth_State {
 				// No exception
 				return NULL;
 			}
-			$id = $_REQUEST[self::EXCEPTION_PARAM];
+			$id = $this->sanitize($_REQUEST[self::EXCEPTION_PARAM]);
 		}
 
 		$state = self::loadState($id, self::EXCEPTION_STAGE);
