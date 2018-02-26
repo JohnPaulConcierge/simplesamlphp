@@ -68,7 +68,7 @@ abstract class SimpleSAML_SessionHandlerCookie extends SimpleSAML_SessionHandler
         if ($this->session_id === null) {
             if (self::hasSessionCookie()) {
                 // attempt to retrieve the session id from the cookie
-                $this->session_id = \SimpleSAML_Utilities::sanitize($_COOKIE[$this->cookie_name]);
+                $this->session_id = $_COOKIE[$this->cookie_name];
             }
 
             // check if we have a valid session id

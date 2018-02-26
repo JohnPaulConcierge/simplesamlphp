@@ -26,7 +26,7 @@ class Net
     public static function ipCIDRcheck($cidr, $ip = null)
     {
         if ($ip === null) {
-            $ip = \SimpleSAML_Utilities::sanitize($_SERVER['REMOTE_ADDR']);
+            $ip = $_SERVER['REMOTE_ADDR'];
         }
         if (strpos($cidr, '/') === false) {
             return false;

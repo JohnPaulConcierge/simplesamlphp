@@ -217,7 +217,7 @@ class SimpleSAML_Error_Error extends SimpleSAML_Error_Exception
         $session = SimpleSAML_Session::getSessionFromRequest();
 
         if (isset($_SERVER['HTTP_REFERER'])) {
-            $referer = \SimpleSAML_Utilities::sanitize($_SERVER['HTTP_REFERER']);
+            $referer = $_SERVER['HTTP_REFERER'];
             // remove anything after the first '?' or ';', just in case it contains any sensitive data
             $referer = explode('?', $referer, 2);
             $referer = $referer[0];

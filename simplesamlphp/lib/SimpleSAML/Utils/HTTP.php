@@ -44,9 +44,9 @@ class HTTP
     private static function getServerHost()
     {
         if (array_key_exists('HTTP_HOST', $_SERVER)) {
-            $current = \SimpleSAML_Utilities::sanitize($_SERVER['HTTP_HOST']);
+            $current = $_SERVER['HTTP_HOST'];
         } elseif (array_key_exists('SERVER_NAME', $_SERVER)) {
-            $current = \SimpleSAML_Utilities::sanitize($_SERVER['SERVER_NAME']);
+            $current = $_SERVER['SERVER_NAME'];
         } else {
             // almost certainly not what you want, but...
             $current = 'localhost';
@@ -98,7 +98,7 @@ class HTTP
      */
     private static function getServerPort()
     {
-        $port = (isset($_SERVER['SERVER_PORT'])) ? \SimpleSAML_Utilities::sanitize($_SERVER['SERVER_PORT']) : '80';
+        $port = (isset($_SERVER['SERVER_PORT'])) ? $_SERVER['SERVER_PORT'] : '80';
         if (self::getServerHTTPS()) {
             if ($port !== '443') {
                 return ':'.$port;
@@ -451,7 +451,7 @@ class HTTP
             return array();
         }
 
-        $languages = explode(',', strtolower(\SimpleSAML_Utilities::sanitize($_SERVER['HTTP_ACCEPT_LANGUAGE'])));
+        $languages = explode(',', strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']));
 
         $ret = array();
 
@@ -650,7 +650,7 @@ class HTTP
     {
         $cfg = \SimpleSAML_Configuration::getInstance();
         $baseDir = $cfg->getBaseDir();
-        $cur_path = realpath(\SimpleSAML_Utilities::sanitize($_SERVER['SCRIPT_FILENAME']));
+        $cur_path = realpath($_SERVER['SCRIPT_FILENAME']);
         // find the path to the current script relative to the www/ directory of SimpleSAMLphp
         $rel_path = str_replace($baseDir.'www'.DIRECTORY_SEPARATOR, '', $cur_path);
         // convert that relative path to an HTTP query
@@ -681,10 +681,10 @@ class HTTP
 
             $hostname = self::getServerHost();
             $port = self::getServerPort();
-            return $protocol.$hostname.$port.\SimpleSAML_Utilities::sanitize($_SERVER['REQUEST_URI']);
+            return $protocol.$hostname.$port.$_SERVER['REQUEST_URI'];
         }
 
-        return self::getBaseURL().$rel_path.substr(\SimpleSAML_Utilities::sanitize($_SERVER['REQUEST_URI']), $uri_pos + strlen($url_path));
+        return self::getBaseURL().$rel_path.substr($_SERVER['REQUEST_URI'], $uri_pos + strlen($url_path));
     }
 
 

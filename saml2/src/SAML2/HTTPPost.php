@@ -57,9 +57,9 @@ class SAML2_HTTPPost extends SAML2_Binding
     public function receive()
     {
         if (array_key_exists('SAMLRequest', $_POST)) {
-            $msg = SAML2_Utilities_Sanitizer::sanitize($_POST['SAMLRequest']);
+            $msg = $_POST['SAMLRequest'];
         } elseif (array_key_exists('SAMLResponse', $_POST)) {
-            $msg = SAML2_Utilities_Sanitizer::sanitize($_POST['SAMLResponse']);
+            $msg = $_POST['SAMLResponse'];
         } else {
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
@@ -74,7 +74,7 @@ class SAML2_HTTPPost extends SAML2_Binding
         $msg = SAML2_Message::fromXML($xml);
 
         if (array_key_exists('RelayState', $_POST)) {
-            $msg->setRelayState(SAML2_Utilities_Sanitizer::sanitize($_POST['RelayState']));
+            $msg->setRelayState($_POST['RelayState']);
         }
 
         return $msg;

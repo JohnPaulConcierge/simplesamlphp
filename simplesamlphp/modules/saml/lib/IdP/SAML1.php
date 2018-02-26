@@ -76,15 +76,15 @@ class sspmod_saml_IdP_SAML1 {
 		if (!isset($_REQUEST['providerId'])) {
 			throw new SimpleSAML_Error_BadRequest('Missing providerId parameter.');
 		}
-		$spEntityId = (string)\SimpleSAML_Utilities::sanitize($_REQUEST['providerId']);
+		$spEntityId = (string)$_REQUEST['providerId'];
 
 		if (!isset($_REQUEST['shire'])) {
 			throw new SimpleSAML_Error_BadRequest('Missing shire parameter.');
 		}
-		$shire = (string)\SimpleSAML_Utilities::sanitize($_REQUEST['shire']);
+		$shire = (string)$_REQUEST['shire'];
 
 		if (isset($_REQUEST['target'])) {
-			$target = \SimpleSAML_Utilities::sanitize($_REQUEST['target']);
+			$target = $_REQUEST['target'];
 		} else {
 			$target = NULL;
 		}

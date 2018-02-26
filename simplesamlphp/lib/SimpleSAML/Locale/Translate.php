@@ -464,7 +464,7 @@ class Translate
         }
 
         \SimpleSAML\Logger::error(
-            \SimpleSAML_Utilities::sanitize($_SERVER['PHP_SELF']).' - Template: Could not find dictionary file at ['.$filename.']'
+            $_SERVER['PHP_SELF'].' - Template: Could not find dictionary file at ['.$filename.']'
         );
         return array();
     }
