@@ -17,7 +17,7 @@ class SimpleSAML_XML_Signer {
 	private $idAttrName;
 
 	/**
-	 * The private key (as an XMLSecurityKey).
+	 * The private key (as an \RobRichards\XMLSecLibs\XMLSecurityKey).
 	 */
 	private $privateKey;
 
@@ -96,7 +96,7 @@ class SimpleSAML_XML_Signer {
 		assert('is_array($privatekey)');
 		assert('array_key_exists("PEM", $privatekey)');
 
-		$this->privateKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
+		$this->privateKey = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
 		if (array_key_exists('password', $privatekey)) {
 			$this->privateKey->passphrase = $privatekey['password'];
 		}
@@ -238,16 +238,16 @@ class SimpleSAML_XML_Signer {
 		}
 
 
-		$objXMLSecDSig = new XMLSecurityDSig();
-		$objXMLSecDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
+		$objXMLSecDSig = new \RobRichards\XMLSecLibs\XMLSecurityDSig();
+		$objXMLSecDSig->setCanonicalMethod(\RobRichards\XMLSecLibs\XMLSecurityDSig::EXC_C14N);
 
 		$options = array();
 		if($this->idAttrName !== FALSE) {
 			$options['id_name'] = $this->idAttrName;
 		}
 
-		$objXMLSecDSig->addReferenceList(array($node), XMLSecurityDSig::SHA1,
-			array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', XMLSecurityDSig::EXC_C14N),
+		$objXMLSecDSig->addReferenceList(array($node), \RobRichards\XMLSecLibs\XMLSecurityDSig::SHA1,
+			array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', \RobRichards\XMLSecLibs\XMLSecurityDSig::EXC_C14N),
 			$options);
 
 		$objXMLSecDSig->sign($this->privateKey);

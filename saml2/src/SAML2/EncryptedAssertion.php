@@ -39,30 +39,30 @@ class SAML2_EncryptedAssertion
      * Set the assertion.
      *
      * @param SAML2_Assertion $assertion The assertion.
-     * @param XMLSecurityKey  $key       The key we should use to encrypt the assertion.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey  $key       The key we should use to encrypt the assertion.
      * @throws Exception
      */
-    public function setAssertion(SAML2_Assertion $assertion, XMLSecurityKey $key)
+    public function setAssertion(SAML2_Assertion $assertion, \RobRichards\XMLSecLibs\XMLSecurityKey $key)
     {
         $xml = $assertion->toXML();
 
         SAML2_Utils::getContainer()->debugMessage($xml, 'encrypt');
 
-        $enc = new XMLSecEnc();
+        $enc = new \RobRichards\XMLSecLibs\XMLSecEnc();
         $enc->setNode($xml);
-        $enc->type = XMLSecEnc::Element;
+        $enc->type = \RobRichards\XMLSecLibs\XMLSecEnc::Element;
 
         switch ($key->type) {
-            case XMLSecurityKey::TRIPLEDES_CBC:
-            case XMLSecurityKey::AES128_CBC:
-            case XMLSecurityKey::AES192_CBC:
-            case XMLSecurityKey::AES256_CBC:
+            case \RobRichards\XMLSecLibs\XMLSecurityKey::TRIPLEDES_CBC:
+            case \RobRichards\XMLSecLibs\XMLSecurityKey::AES128_CBC:
+            case \RobRichards\XMLSecLibs\XMLSecurityKey::AES192_CBC:
+            case \RobRichards\XMLSecLibs\XMLSecurityKey::AES256_CBC:
                 $symmetricKey = $key;
                 break;
 
-            case XMLSecurityKey::RSA_1_5:
-            case XMLSecurityKey::RSA_OAEP_MGF1P:
-                $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+            case \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_1_5:
+            case \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_OAEP_MGF1P:
+                $symmetricKey = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::AES128_CBC);
                 $symmetricKey->generateSessionKey();
 
                 $enc->encryptKey($key, $symmetricKey);
@@ -79,11 +79,11 @@ class SAML2_EncryptedAssertion
     /**
      * Retrieve the assertion.
      *
-     * @param  XMLSecurityKey  $inputKey  The key we should use to decrypt the assertion.
+     * @param  \RobRichards\XMLSecLibs\XMLSecurityKey  $inputKey  The key we should use to decrypt the assertion.
      * @param  array           $blacklist Blacklisted decryption algorithms.
      * @return SAML2_Assertion The decrypted assertion.
      */
-    public function getAssertion(XMLSecurityKey $inputKey, array $blacklist = array())
+    public function getAssertion(\RobRichards\XMLSecLibs\XMLSecurityKey $inputKey, array $blacklist = array())
     {
         $assertionXML = SAML2_Utils::decryptElement($this->encryptedData, $inputKey, $blacklist);
 

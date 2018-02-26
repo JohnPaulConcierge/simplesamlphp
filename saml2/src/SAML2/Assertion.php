@@ -58,7 +58,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * Private key we should use to encrypt the attributes.
      *
-     * @var XMLSecurityKey|NULL
+     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|NULL
      */
     private $encryptionKey;
 
@@ -166,7 +166,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      *
      * The private key can be NULL, in which case the assertion is sent unsigned.
      *
-     * @var XMLSecurityKey|NULL
+     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|NULL
      */
     private $signatureKey;
 
@@ -570,12 +570,12 @@ class SAML2_Assertion implements SAML2_SignedElement
      * Otherwise, TRUE will be returned. An exception is thrown if the
      * signature validation fails.
      *
-     * @param  XMLSecurityKey $key The key we should check against.
+     * @param  \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against.
      * @return boolean        TRUE if successful, FALSE if it is unsigned.
      */
-    public function validate(XMLSecurityKey $key)
+    public function validate(\RobRichards\XMLSecLibs\XMLSecurityKey $key)
     {
-        assert('$key->type === XMLSecurityKey::RSA_SHA1');
+        assert('$key->type === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1');
 
         if ($this->signatureData === NULL) {
             return FALSE;
@@ -698,9 +698,9 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * Encrypt the NameID in the Assertion.
      *
-     * @param XMLSecurityKey $key The encryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The encryption key.
      */
-    public function encryptNameId(XMLSecurityKey $key)
+    public function encryptNameId(\RobRichards\XMLSecLibs\XMLSecurityKey $key)
     {
         /* First create a XML representation of the NameID. */
         $doc = SAML2_DOMDocumentFactory::create();
@@ -712,13 +712,13 @@ class SAML2_Assertion implements SAML2_SignedElement
         SAML2_Utils::getContainer()->debugMessage($nameId, 'encrypt');
 
         /* Encrypt the NameID. */
-        $enc = new XMLSecEnc();
+        $enc = new \RobRichards\XMLSecLibs\XMLSecEnc();
         $enc->setNode($nameId);
         // @codingStandardsIgnoreStart
-        $enc->type = XMLSecEnc::Element;
+        $enc->type = \RobRichards\XMLSecLibs\XMLSecEnc::Element;
         // @codingStandardsIgnoreEnd
 
-        $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+        $symmetricKey = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::AES128_CBC);
         $symmetricKey->generateSessionKey();
         $enc->encryptKey($key, $symmetricKey);
 
@@ -729,10 +729,10 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * Decrypt the NameId of the subject in the assertion.
      *
-     * @param XMLSecurityKey $key       The decryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
      */
-    public function decryptNameId(XMLSecurityKey $key, array $blacklist = array())
+    public function decryptNameId(\RobRichards\XMLSecLibs\XMLSecurityKey $key, array $blacklist = array())
     {
         if ($this->encryptedNameId === NULL) {
             /* No NameID to decrypt. */
@@ -760,11 +760,11 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * Decrypt the assertion attributes.
      *
-     * @param XMLSecurityKey $key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      * @param array $blacklist
      * @throws Exception
      */
-    public function decryptAttributes(XMLSecurityKey $key, array $blacklist = array())
+    public function decryptAttributes(\RobRichards\XMLSecLibs\XMLSecurityKey $key, array $blacklist = array())
     {
         if ($this->encryptedAttributes === NULL) {
             return;
@@ -1187,7 +1187,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * Retrieve the private key we should use to sign the assertion.
      *
-     * @return XMLSecurityKey|NULL The key, or NULL if no key is specified.
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|NULL The key, or NULL if no key is specified.
      */
     public function getSignatureKey()
     {
@@ -1199,9 +1199,9 @@ class SAML2_Assertion implements SAML2_SignedElement
      *
      * If the key is NULL, the assertion will be sent unsigned.
      *
-     * @param XMLSecurityKey|NULL $signatureKey
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|NULL $signatureKey
      */
-    public function setSignatureKey(XMLsecurityKey $signatureKey = NULL)
+    public function setSignatureKey(\RobRichards\XMLSecLibs\XMLSecurityKey $signatureKey = NULL)
     {
         $this->signatureKey = $signatureKey;
     }
@@ -1209,7 +1209,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * Return the key we should use to encrypt the assertion.
      *
-     * @return XMLSecurityKey|NULL The key, or NULL if no key is specified..
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|NULL The key, or NULL if no key is specified..
      *
      */
     public function getEncryptionKey()
@@ -1220,9 +1220,9 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * Set the private key we should use to encrypt the attributes.
      *
-     * @param XMLSecurityKey|NULL $Key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|NULL $Key
      */
-    public function setEncryptionKey(XMLSecurityKey $Key = NULL)
+    public function setEncryptionKey(\RobRichards\XMLSecLibs\XMLSecurityKey $Key = NULL)
     {
         $this->encryptionKey = $Key;
     }
@@ -1544,14 +1544,14 @@ class SAML2_Assertion implements SAML2_SignedElement
                 }
             }
             /*Once the attribute nodes are built, the are encrypted*/
-            $EncAssert = new XMLSecEnc();
+            $EncAssert = new \RobRichards\XMLSecLibs\XMLSecEnc();
             $EncAssert->setNode($document2->documentElement);
             $EncAssert->type = 'http://www.w3.org/2001/04/xmlenc#Element';
             /*
              * Attributes are encrypted with a session key and this one with
              * $EncryptionKey
              */
-            $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES256_CBC);
+            $symmetricKey = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::AES256_CBC);
             $symmetricKey->generateSessionKey();
             $EncAssert->encryptKey($this->encryptionKey, $symmetricKey);
             $EncrNode = $EncAssert->encryptNode($symmetricKey);

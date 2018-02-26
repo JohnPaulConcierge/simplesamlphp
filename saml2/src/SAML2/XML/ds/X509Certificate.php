@@ -38,7 +38,7 @@ class SAML2_XML_ds_X509Certificate
     {
         assert('is_string($this->certificate)');
 
-        return SAML2_Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->certificate);
+        return SAML2_Utils::addString($parent, \RobRichards\XMLSecLibs\XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->certificate);
     }
 
 }

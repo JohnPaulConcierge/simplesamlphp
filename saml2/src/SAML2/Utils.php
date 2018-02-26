@@ -29,7 +29,7 @@ class SAML2_Utils
     public static function validateElement(DOMElement $root)
     {
         /* Create an XML security object. */
-        $objXMLSecDSig = new XMLSecurityDSig();
+        $objXMLSecDSig = new \RobRichards\XMLSecLibs\XMLSecurityDSig();
 
         /* Both SAML messages and SAML assertions use the 'ID' attribute. */
         $objXMLSecDSig->idKeys[] = 'ID';
@@ -89,15 +89,15 @@ class SAML2_Utils
 
 
     /**
-     * Helper function to convert a XMLSecurityKey to the correct algorithm.
+     * Helper function to convert a \RobRichards\XMLSecLibs\XMLSecurityKey to the correct algorithm.
      *
-     * @param  XMLSecurityKey $key       The key.
+     * @param  \RobRichards\XMLSecLibs\XMLSecurityKey $key       The key.
      * @param  string         $algorithm The desired algorithm.
      * @param  string         $type      Public or private key, defaults to public.
-     * @return XMLSecurityKey The new key.
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey The new key.
      * @throws Exception
      */
-    public static function castKey(XMLSecurityKey $key, $algorithm, $type = 'public')
+    public static function castKey(\RobRichards\XMLSecLibs\XMLSecurityKey $key, $algorithm, $type = 'public')
     {
         assert('is_string($algorithm)');
         assert('$type === "public" || $type === "private"');
@@ -109,13 +109,13 @@ class SAML2_Utils
 
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === FALSE) {
-            throw new Exception('Unable to get key details from XMLSecurityKey.');
+            throw new Exception('Unable to get key details from \RobRichards\XMLSecLibs\XMLSecurityKey.');
         }
         if (!isset($keyInfo['key'])) {
             throw new Exception('Missing key in public key details.');
         }
 
-        $newKey = new XMLSecurityKey($algorithm, array('type'=>$type));
+        $newKey = new \RobRichards\XMLSecLibs\XMLSecurityKey($algorithm, array('type'=>$type));
         $newKey->loadKey($keyInfo['key']);
 
         return $newKey;
@@ -128,14 +128,14 @@ class SAML2_Utils
      * An exception is thrown if we are unable to validate the signature.
      *
      * @param array          $info The information returned by the validateElement()-function.
-     * @param XMLSecurityKey $key  The publickey that should validate the Signature object.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key  The publickey that should validate the Signature object.
      * @throws Exception
      */
-    public static function validateSignature(array $info, XMLSecurityKey $key)
+    public static function validateSignature(array $info, \RobRichards\XMLSecLibs\XMLSecurityKey $key)
     {
         assert('array_key_exists("Signature", $info)');
 
-        /** @var XMLSecurityDSig $objXMLSecDSig */
+        /** @var \RobRichards\XMLSecLibs\XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];
 
         $sigMethod = self::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod');
@@ -148,7 +148,7 @@ class SAML2_Utils
         }
         $algo = $sigMethod->getAttribute('Algorithm');
 
-        if ($key->type === XMLSecurityKey::RSA_SHA1 && $algo !== $key->type) {
+        if ($key->type === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1 && $algo !== $key->type) {
             $key = self::castKey($key, $algo);
         }
 
@@ -183,8 +183,8 @@ class SAML2_Utils
             $xpCache->registerNamespace('saml_protocol', SAML2_Const::NS_SAMLP);
             $xpCache->registerNamespace('saml_assertion', SAML2_Const::NS_SAML);
             $xpCache->registerNamespace('saml_metadata', SAML2_Const::NS_MD);
-            $xpCache->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
-            $xpCache->registerNamespace('xenc', XMLSecEnc::XMLENCNS);
+            $xpCache->registerNamespace('ds', \RobRichards\XMLSecLibs\XMLSecurityDSig::XMLDSIGNS);
+            $xpCache->registerNamespace('xenc', \RobRichards\XMLSecLibs\XMLSecEnc::XMLENCNS);
         }
 
         $results = $xpCache->query($query, $node);
@@ -322,38 +322,38 @@ class SAML2_Utils
     /**
      * Insert a Signature-node.
      *
-     * @param XMLSecurityKey $key           The key we should use to sign the message.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key           The key we should use to sign the message.
      * @param array          $certificates  The certificates we should add to the signature node.
      * @param DOMElement     $root          The XML node we should sign.
      * @param DOMNode        $insertBefore  The XML element we should insert the signature element before.
      */
     public static function insertSignature(
-        XMLSecurityKey $key,
+        \RobRichards\XMLSecLibs\XMLSecurityKey $key,
         array $certificates,
         DOMElement $root,
         DOMNode $insertBefore = NULL
     ) {
-        $objXMLSecDSig = new XMLSecurityDSig();
-        $objXMLSecDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
+        $objXMLSecDSig = new \RobRichards\XMLSecLibs\XMLSecurityDSig();
+        $objXMLSecDSig->setCanonicalMethod(\RobRichards\XMLSecLibs\XMLSecurityDSig::EXC_C14N);
 
         switch ($key->type) {
-            case XMLSecurityKey::RSA_SHA256:
-                $type = XMLSecurityDSig::SHA256;
+            case \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA256:
+                $type = \RobRichards\XMLSecLibs\XMLSecurityDSig::SHA256;
                 break;
-            case XMLSecurityKey::RSA_SHA384:
-                $type = XMLSecurityDSig::SHA384;
+            case \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA384:
+                $type = \RobRichards\XMLSecLibs\XMLSecurityDSig::SHA384;
                 break;
-            case XMLSecurityKey::RSA_SHA512:
-                $type = XMLSecurityDSig::SHA512;
+            case \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA512:
+                $type = \RobRichards\XMLSecLibs\XMLSecurityDSig::SHA512;
                 break;
             default:
-                $type = XMLSecurityDSig::SHA1;
+                $type = \RobRichards\XMLSecLibs\XMLSecurityDSig::SHA1;
         }
 
         $objXMLSecDSig->addReferenceList(
             array($root),
             $type,
-            array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', XMLSecurityDSig::EXC_C14N),
+            array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', \RobRichards\XMLSecLibs\XMLSecurityDSig::EXC_C14N),
             array('id_name' => 'ID', 'overwrite' => FALSE)
         );
 
@@ -373,14 +373,14 @@ class SAML2_Utils
      * This is an internal helper function.
      *
      * @param  DOMElement     $encryptedData The encrypted data.
-     * @param  XMLSecurityKey $inputKey      The decryption key.
+     * @param  \RobRichards\XMLSecLibs\XMLSecurityKey $inputKey      The decryption key.
      * @param  array          &$blacklist    Blacklisted decryption algorithms.
      * @return DOMElement     The decrypted element.
      * @throws Exception
      */
-    private static function doDecryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist)
+    private static function doDecryptElement(DOMElement $encryptedData, \RobRichards\XMLSecLibs\XMLSecurityKey $inputKey, array &$blacklist)
     {
-        $enc = new XMLSecEnc();
+        $enc = new \RobRichards\XMLSecLibs\XMLSecEnc();
 
         $enc->setNode($encryptedData);
         $enc->type = $encryptedData->getAttribute("Type");
@@ -403,14 +403,14 @@ class SAML2_Utils
                 throw new Exception('Algorithm disabled: ' . var_export($symKeyInfoAlgo, TRUE));
             }
 
-            if ($symKeyInfoAlgo === XMLSecurityKey::RSA_OAEP_MGF1P && $inputKeyAlgo === XMLSecurityKey::RSA_1_5) {
+            if ($symKeyInfoAlgo === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_OAEP_MGF1P && $inputKeyAlgo === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_1_5) {
                 /*
                  * The RSA key formats are equal, so loading an RSA_1_5 key
                  * into an RSA_OAEP_MGF1P key can be done without problems.
                  * We therefore pretend that the input key is an
                  * RSA_OAEP_MGF1P key.
                  */
-                $inputKeyAlgo = XMLSecurityKey::RSA_OAEP_MGF1P;
+                $inputKeyAlgo = \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_OAEP_MGF1P;
             }
 
             /* Make sure that the input key format is the same as the one used to encrypt the key. */
@@ -423,7 +423,7 @@ class SAML2_Utils
                 );
             }
 
-            /** @var XMLSecEnc $encKey */
+            /** @var \RobRichards\XMLSecLibs\XMLSecEnc $encKey */
             $encKey = $symmetricKeyInfo->encryptedCtx;
             $symmetricKeyInfo->key = $inputKey->key;
 
@@ -518,12 +518,12 @@ class SAML2_Utils
      * Decrypt an encrypted element.
      *
      * @param  DOMElement     $encryptedData The encrypted data.
-     * @param  XMLSecurityKey $inputKey      The decryption key.
+     * @param  \RobRichards\XMLSecLibs\XMLSecurityKey $inputKey      The decryption key.
      * @param  array          $blacklist     Blacklisted decryption algorithms.
      * @return DOMElement     The decrypted element.
      * @throws Exception
      */
-    public static function decryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = array())
+    public static function decryptElement(DOMElement $encryptedData, \RobRichards\XMLSecLibs\XMLSecurityKey $inputKey, array $blacklist = array())
     {
         try {
             return self::doDecryptElement($encryptedData, $inputKey, $blacklist);

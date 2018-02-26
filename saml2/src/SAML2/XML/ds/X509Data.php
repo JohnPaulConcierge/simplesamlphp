@@ -33,7 +33,7 @@ class SAML2_XML_ds_X509Data
                 continue;
             }
 
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+            if ($n->namespaceURI !== \RobRichards\XMLSecLibs\XMLSecurityDSig::XMLDSIGNS) {
                 $this->data[] = new SAML2_XML_Chunk($n);
                 continue;
             }
@@ -60,7 +60,7 @@ class SAML2_XML_ds_X509Data
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:X509Data');
+        $e = $doc->createElementNS(\RobRichards\XMLSecLibs\XMLSecurityDSig::XMLDSIGNS, 'ds:X509Data');
         $parent->appendChild($e);
 
         /** @var SAML2_XML_Chunk|SAML2_XML_ds_X509Certificate $n */

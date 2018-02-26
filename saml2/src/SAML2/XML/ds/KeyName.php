@@ -38,7 +38,7 @@ class SAML2_XML_ds_KeyName
     {
         assert('is_string($this->name)');
 
-        return SAML2_Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
+        return SAML2_Utils::addString($parent, \RobRichards\XMLSecLibs\XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
     }
 
 }

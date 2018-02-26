@@ -31,7 +31,7 @@ class SAML2_Certificate_PrivateKeyLoader
 
         $senderSharedKey = $identityProvider->getSharedKey();
         if ($senderSharedKey) {
-            $key = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+            $key = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::AES128_CBC);
             $key->loadKey($senderSharedKey);
             $decryptionKeys->add($key);
 
@@ -54,12 +54,12 @@ class SAML2_Certificate_PrivateKeyLoader
     /**
      * @param SAML2_Certificate_PrivateKey $privateKey
      *
-     * @return XMLSecurityKey
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey
      * @throws Exception
      */
     private function convertPrivateKeyToRsaKey(SAML2_Certificate_PrivateKey $privateKey)
     {
-        $key        = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, array('type' => 'private'));
+        $key        = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::RSA_1_5, array('type' => 'private'));
         $passphrase = $privateKey->getPassphrase();
         if ($passphrase) {
             $key->passphrase = $passphrase;

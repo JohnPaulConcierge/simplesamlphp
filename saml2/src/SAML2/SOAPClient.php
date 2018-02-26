@@ -186,16 +186,16 @@ class SAML2_SOAPClient
      * Validate a SOAP message against the certificate on the SSL connection.
      *
      * @param string         $data The public key that was used on the connection.
-     * @param XMLSecurityKey $key  The key we should validate the certificate against.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key  The key we should validate the certificate against.
      * @throws Exception
      */
-    public static function validateSSL($data, XMLSecurityKey $key)
+    public static function validateSSL($data, \RobRichards\XMLSecLibs\XMLSecurityKey $key)
     {
         assert('is_string($data)');
 
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === FALSE) {
-            throw new Exception('Unable to get key details from XMLSecurityKey.');
+            throw new Exception('Unable to get key details from \RobRichards\XMLSecLibs\XMLSecurityKey.');
         }
 
         if (!isset($keyInfo['key'])) {

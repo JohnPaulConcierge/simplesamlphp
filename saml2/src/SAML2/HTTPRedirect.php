@@ -200,10 +200,10 @@ class SAML2_HTTPRedirect extends SAML2_Binding
      * Throws an exception if we are unable to validate the signature.
      *
      * @param array          $data The data we need to validate the query string.
-     * @param XMLSecurityKey $key  The key we should validate the query against.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key  The key we should validate the query against.
      * @throws Exception
      */
-    public static function validateSignature(array $data, XMLSecurityKey $key)
+    public static function validateSignature(array $data, \RobRichards\XMLSecLibs\XMLSecurityKey $key)
     {
         assert('array_key_exists("Query", $data)');
         assert('array_key_exists("SigAlg", $data)');
@@ -215,7 +215,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
 
         $signature = base64_decode($signature);
 
-        if ($key->type !== XMLSecurityKey::RSA_SHA1) {
+        if ($key->type !== \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1) {
             throw new Exception('Invalid key type for validating signature on query string.');
         }
         if ($key->type !== $sigAlg) {

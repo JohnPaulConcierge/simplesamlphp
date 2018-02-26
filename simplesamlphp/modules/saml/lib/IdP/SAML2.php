@@ -962,7 +962,7 @@ class sspmod_saml_IdP_SAML2 {
 
 		$sharedKey = $spMetadata->getString('sharedkey', NULL);
 		if ($sharedKey !== NULL) {
-			$key = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+			$key = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::AES128_CBC);
 			$key->loadKey($sharedKey);
 		} else {
 			$keys = $spMetadata->getPublicKeys('encryption', TRUE);
@@ -978,7 +978,7 @@ class sspmod_saml_IdP_SAML2 {
 			}
 
 			/* Extract the public key from the certificate for encryption. */
-			$key = new XMLSecurityKey(XMLSecurityKey::RSA_OAEP_MGF1P, array('type'=>'public'));
+			$key = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::RSA_OAEP_MGF1P, array('type'=>'public'));
 			$key->loadKey($pemKey);
 		}
 

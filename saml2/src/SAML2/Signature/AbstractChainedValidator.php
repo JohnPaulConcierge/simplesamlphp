@@ -26,7 +26,7 @@ abstract class SAML2_Signature_AbstractChainedValidator implements SAML2_Signatu
     {
         $lastException = NULL;
         foreach ($pemCandidates as $index => $candidateKey) {
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'public'));
+            $key = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1, array('type' => 'public'));
             $key->loadKey($candidateKey->getCertificate());
 
             try {

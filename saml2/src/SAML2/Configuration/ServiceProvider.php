@@ -69,6 +69,6 @@ class SAML2_Configuration_ServiceProvider extends SAML2_Configuration_ArrayAdapt
 
     public function getBlacklistedAlgorithms()
     {
-        return $this->get('blacklistedEncryptionAlgorithms', array(XMLSecurityKey::RSA_1_5));
+        return $this->get('blacklistedEncryptionAlgorithms', array(\RobRichards\XMLSecLibs\XMLSecurityKey::RSA_1_5));
     }
 }

@@ -82,7 +82,7 @@ class SAML2_XML_saml_SubjectConfirmationData
             if (!($n instanceof DOMElement)) {
                 continue;
             }
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+            if ($n->namespaceURI !== \RobRichards\XMLSecLibs\XMLSecurityDSig::XMLDSIGNS) {
                 $this->info[] = new SAML2_XML_Chunk($n);
                 continue;
             }

@@ -187,7 +187,7 @@ class SimpleSAML_Metadata_Signer
         }
 
         // load the private key
-        $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
+        $objKey = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
         if (array_key_exists('privatekey_pass', $keyCertFiles)) {
             $objKey->passphrase = $keyCertFiles['privatekey_pass'];
         }
@@ -198,17 +198,17 @@ class SimpleSAML_Metadata_Signer
 
         // sign the metadata with our private key
         if ($type == 'ADFS IdP') {
-            $objXMLSecDSig = new sspmod_adfs_XMLSecurityDSig($metadataString);
+            $objXMLSecDSig = new sspmod_adfs_\RobRichards\XMLSecLibs\XMLSecurityDSig($metadataString);
         } else {
-            $objXMLSecDSig = new XMLSecurityDSig();
+            $objXMLSecDSig = new \RobRichards\XMLSecLibs\XMLSecurityDSig();
         }
 
-        $objXMLSecDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
+        $objXMLSecDSig->setCanonicalMethod(\RobRichards\XMLSecLibs\XMLSecurityDSig::EXC_C14N);
 
         $objXMLSecDSig->addReferenceList(
             array($rootNode),
-            XMLSecurityDSig::SHA1,
-            array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', XMLSecurityDSig::EXC_C14N),
+            \RobRichards\XMLSecLibs\XMLSecurityDSig::SHA1,
+            array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', \RobRichards\XMLSecLibs\XMLSecurityDSig::EXC_C14N),
             array('id_name' => 'ID')
         );
 

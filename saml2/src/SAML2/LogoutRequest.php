@@ -116,9 +116,9 @@ class SAML2_LogoutRequest extends SAML2_Request
     /**
      * Encrypt the NameID in the LogoutRequest.
      *
-     * @param XMLSecurityKey $key The encryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The encryption key.
      */
-    public function encryptNameId(XMLSecurityKey $key)
+    public function encryptNameId(\RobRichards\XMLSecLibs\XMLSecurityKey $key)
     {
         /* First create a XML representation of the NameID. */
         $doc = SAML2_DOMDocumentFactory::create();
@@ -130,11 +130,11 @@ class SAML2_LogoutRequest extends SAML2_Request
         SAML2_Utils::getContainer()->debugMessage($nameId, 'encrypt');
 
         /* Encrypt the NameID. */
-        $enc = new XMLSecEnc();
+        $enc = new \RobRichards\XMLSecLibs\XMLSecEnc();
         $enc->setNode($nameId);
-        $enc->type = XMLSecEnc::Element;
+        $enc->type = \RobRichards\XMLSecLibs\XMLSecEnc::Element;
 
-        $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+        $symmetricKey = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::AES128_CBC);
         $symmetricKey->generateSessionKey();
         $enc->encryptKey($key, $symmetricKey);
 
@@ -145,10 +145,10 @@ class SAML2_LogoutRequest extends SAML2_Request
     /**
      * Decrypt the NameID in the LogoutRequest.
      *
-     * @param XMLSecurityKey $key       The decryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
      */
-    public function decryptNameId(XMLSecurityKey $key, array $blacklist = array())
+    public function decryptNameId(\RobRichards\XMLSecLibs\XMLSecurityKey $key, array $blacklist = array())
     {
         if ($this->encryptedNameId === NULL) {
             /* No NameID to decrypt. */

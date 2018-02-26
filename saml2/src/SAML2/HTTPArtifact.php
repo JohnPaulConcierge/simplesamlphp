@@ -152,10 +152,10 @@ class SAML2_HTTPArtifact extends SAML2_Binding
      * A validator which returns TRUE if the ArtifactResponse was signed with the given key
      *
      * @param SAML2_ArtifactResponse $message
-     * @param XMLSecurityKey $key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      * @return bool
      */
-    public static function validateSignature(SAML2_ArtifactResponse $message, XMLSecurityKey $key)
+    public static function validateSignature(SAML2_ArtifactResponse $message, \RobRichards\XMLSecLibs\XMLSecurityKey $key)
     {
         return $message->validate($key);
     }

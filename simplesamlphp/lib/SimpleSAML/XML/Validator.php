@@ -51,7 +51,7 @@ class SimpleSAML_XML_Validator {
 		}
 
 		// Create an XML security object
-		$objXMLSecDSig = new XMLSecurityDSig();
+		$objXMLSecDSig = new \RobRichards\XMLSecLibs\XMLSecurityDSig();
 
 		// Add the id attribute if the user passed in an id attribute
 		if($idAttribute !== NULL) {
@@ -91,7 +91,7 @@ class SimpleSAML_XML_Validator {
 		} else {
 			// No PEM data. Search for key in signature
 
-			if (!XMLSecEnc::staticLocateKeyInfo($objKey, $signatureElement)) {
+			if (!\RobRichards\XMLSecLibs\XMLSecEnc::staticLocateKeyInfo($objKey, $signatureElement)) {
 				throw new Exception('Error finding key data for XML signature validation.');
 			}
 

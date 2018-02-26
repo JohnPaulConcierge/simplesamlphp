@@ -44,7 +44,7 @@ class SAML2_XML_ds_KeyInfo
                 continue;
             }
 
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+            if ($n->namespaceURI !== \RobRichards\XMLSecLibs\XMLSecurityDSig::XMLDSIGNS) {
                 $this->info[] = new SAML2_XML_Chunk($n);
                 continue;
             }
@@ -75,7 +75,7 @@ class SAML2_XML_ds_KeyInfo
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:KeyInfo');
+        $e = $doc->createElementNS(\RobRichards\XMLSecLibs\XMLSecurityDSig::XMLDSIGNS, 'ds:KeyInfo');
         $parent->appendChild($e);
 
         if (isset($this->Id)) {

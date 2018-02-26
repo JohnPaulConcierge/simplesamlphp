@@ -14,7 +14,7 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
      *
      * The private key can be NULL, in which case the message is sent unsigned.
      *
-     * @var XMLSecurityKey|NULL
+     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|NULL
      */
     private $signatureKey;
 
@@ -88,11 +88,11 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
      * signature we can validate. An exception is thrown if the signature
      * validation fails.
      *
-     * @param  XMLSecurityKey $key The key we should check against.
+     * @param  \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against.
      * @return boolean        TRUE on success, FALSE when we don't have a signature.
      * @throws Exception
      */
-    public function validate(XMLSecurityKey $key)
+    public function validate(\RobRichards\XMLSecLibs\XMLSecurityKey $key)
     {
         if (count($this->validators) === 0) {
             return FALSE;
@@ -121,7 +121,7 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
     /**
      * Retrieve the private key we should use to sign the message.
      *
-     * @return XMLSecurityKey|NULL The key, or NULL if no key is specified.
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|NULL The key, or NULL if no key is specified.
      */
     public function getSignatureKey()
     {
@@ -133,9 +133,9 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
      *
      * If the key is NULL, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|NULL $signatureKey
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|NULL $signatureKey
      */
-    public function setSignatureKey(XMLsecurityKey $signatureKey = NULL)
+    public function setSignatureKey(\RobRichards\XMLSecLibs\XMLSecurityKey $signatureKey = NULL)
     {
         $this->signatureKey = $signatureKey;
     }
@@ -178,7 +178,7 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
                 "-----END CERTIFICATE-----\n";
 
             /* Extract the public key from the certificate for validation. */
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
+            $key = new \RobRichards\XMLSecLibs\XMLSecurityKey(\RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
             $key->loadKey($pemCert);
 
             try {
