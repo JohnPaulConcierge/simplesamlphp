@@ -36,6 +36,8 @@ class HTTP
     /**
      * Retrieve Host value from $_SERVER environment variables.
      *
+     * @throws \Exception
+     *
      * @return string The current host name, including the port if needed. It will use localhost when unable to
      *     determine the current host.
      *
@@ -44,6 +46,13 @@ class HTTP
     private static function getServerHost()
     {
         if (array_key_exists('HTTP_HOST', $_SERVER)) {
+            var_dump($_SERVER['HTTP_HOST']);
+            $config = include 'config/autoload/environment.global.php';
+            if (! in_array($_SERVER['HTTP_HOST'], $config['saml']['available_hosts'])) {
+                throw new \Exception("Unrecognized host " . $_SERVER['HTTP_HOST'] .
+                    ". Please add the hosts you want to cover in your " .
+                    "configuration files, under the 'saml/available_hosts' key");
+            }
             $current = $_SERVER['HTTP_HOST'];
         } elseif (array_key_exists('SERVER_NAME', $_SERVER)) {
             $current = $_SERVER['SERVER_NAME'];
@@ -640,6 +649,8 @@ class HTTP
      *
      * Note that this method does NOT make use of the HTTP X-Forwarded-* set of headers.
      *
+     * @throws \Exception
+     *
      * @return string The current URL, including query parameters.
      *
      * @author Andreas Solberg, UNINETT AS <andreas.solberg@uninett.no>
@@ -655,6 +666,12 @@ class HTTP
         $rel_path = str_replace($baseDir.'www'.DIRECTORY_SEPARATOR, '', $cur_path);
         // convert that relative path to an HTTP query
         $url_path = str_replace(DIRECTORY_SEPARATOR, '/', $rel_path);
+        $config = include 'config/autoload/environment.global.php';
+        if(!in_array($_SERVER['REQUEST_URI'], $config['saml']['available_uri'])) {
+            throw new \Exception("The URI you're trying to access (" . $_SERVER['REQUEST_URI'] .
+                ") has not been whitelisted to use SAML. ".
+                "Please add it in the configuration files, under the key saml/available_uri");
+        }
         // find where the relative path starts in the current request URI
         $uri_pos = (!empty($url_path)) ? strpos($_SERVER['REQUEST_URI'], $url_path) : false;
 

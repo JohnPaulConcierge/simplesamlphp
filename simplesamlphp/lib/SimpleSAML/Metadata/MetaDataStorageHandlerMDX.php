@@ -110,12 +110,18 @@ class SimpleSAML_Metadata_MetaDataStorageHandlerMDX extends SimpleSAML_Metadata_
      * @param string $set The metadata set this entity belongs to.
      * @param string $entityId The entity id of this entity.
      *
+     * @throws \Exception
+     *
      * @return string  The full path to the cache file.
      */
     private function getCacheFilename($set, $entityId)
     {
         assert('is_string($set)');
         assert('is_string($entityId)');
+        if(! preg_match("[A-Za-z0-9]{0,256}", $set)) {
+            throw new \Exception("Cache set " . $set .
+                "has unexpected characters and / or is too long.");
+        }
 
         $cachekey = sha1($entityId);
         return $this->cacheDir.'/'.$set.'-'.$cachekey.'.cached.xml';

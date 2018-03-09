@@ -221,6 +221,8 @@ class sspmod_saml_IdP_SAML2 {
 
 	/**
 	 * Receive an authentication request.
+     *
+     * @throws \Exception
 	 *
 	 * @param SimpleSAML_IdP $idp  The IdP we are receiving it for.
 	 */
@@ -252,6 +254,13 @@ class sspmod_saml_IdP_SAML2 {
 			}
 
 			$spEntityId = (string)$_REQUEST['spentityid'];
+
+            if(! preg_match("[A-Za-z0-9.@]{0,1024}", $_REQUEST['NameIDFormat']) &&
+                ! filter_var($_REQUEST['spentityid'], FILTER_VALIDATE_URL)) {
+                throw new \Exception("spentityid " . $_REQUEST['spentityid'] .
+                    "has unexpected characters and / or is too long.");
+            }
+
 			$spMetadata = $metadata->getMetaDataConfig($spEntityId, 'saml20-sp-remote');
 
 			if (isset($_REQUEST['RelayState'])) {
@@ -265,6 +274,11 @@ class sspmod_saml_IdP_SAML2 {
 			} else {
 				$protocolBinding = NULL;
 			}
+
+			if(! preg_match("[A-Za-z0-9-:.]{0,256}", $_REQUEST['NameIDFormat'])) {
+                throw new \Exception("NameIDFormat " . $_REQUEST['NameIDFormat'] .
+                    "has unexpected characters and / or is too long.");
+            }
 
 			if (isset($_REQUEST['NameIDFormat'])) {
 				$nameIDFormat = (string)$_REQUEST['NameIDFormat'];

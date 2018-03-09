@@ -78,11 +78,20 @@ class sspmod_saml_IdP_SAML1 {
 		}
 		$spEntityId = (string)$_REQUEST['providerId'];
 
+		//If shire is a valid url
+        if(! filter_var($_REQUEST['shire'], FILTER_VALIDATE_URL) || strlen($_REQUEST['shire']) > 2083) {
+            throw new \Exception('Variable shire is not a valid URL');
+        }
 		if (!isset($_REQUEST['shire'])) {
 			throw new SimpleSAML_Error_BadRequest('Missing shire parameter.');
 		}
 		$shire = (string)$_REQUEST['shire'];
+        if(! ctype_alnum($_REQUEST['target']) || strlen($_REQUEST['target']) > 256) {
+            throw new \Exception('Variable target is not a valid resource (a valid resource is an alnum'.
+                ' string with 256 characters or less');
+        }
 
+		//If target is a valid target resource
 		if (isset($_REQUEST['target'])) {
 			$target = $_REQUEST['target'];
 		} else {
