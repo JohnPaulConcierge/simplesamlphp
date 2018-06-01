@@ -46,7 +46,6 @@ class HTTP
     private static function getServerHost()
     {
         if (array_key_exists('HTTP_HOST', $_SERVER)) {
-            var_dump($_SERVER['HTTP_HOST']);
             $config = include 'config/autoload/environment.global.php';
             if (! in_array($_SERVER['HTTP_HOST'], $config['saml']['available_hosts'])) {
                 throw new \Exception("Unrecognized host " . $_SERVER['HTTP_HOST'] .
