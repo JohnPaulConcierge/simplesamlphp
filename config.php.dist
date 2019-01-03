@@ -8,6 +8,7 @@ return [
         'service_provider' => [
             'default-sp' => [
                 'saml:SP',
+                'entityID' => 'https://your-domain/to/your/metadata.xml',
                 // Place here the path to your certificates and private key
                 'privatekey' => 'saml.pem',
                 'certificate' => 'saml.crt',
